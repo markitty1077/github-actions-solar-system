@@ -126,7 +126,7 @@ jobs:
       runs-on: ubuntu-latest
       if: contains(github.ref, 'feature/')
       outputs:
-        INGRESS_IP: ${{ steps.ingress-ip.outputs.INGRESS_IP_ADDRESS }}
+        INGRESS_IP: ${{ steps.ingress-ip.outputs.INGRESS_IP }}
       needs: docker
       environment:
         name: development
@@ -150,7 +150,7 @@ jobs:
       - name: Get Ingress IP
         id: ingress-ip
         run: |
-          echo "$INGRESS_IP_ADDRESS=$(kubectl -n ingress-nginx get services ingress-nginx-controller -o jsonpath="{.status.loadBalancer.ingress[0].ip}")" >> $GITHUB_ENV
+          echo "$INGRESS_IP=$(kubectl -n ingress-nginx get services ingress-nginx-controller -o jsonpath="{.status.loadBalancer.ingress[0].ip}")" >> $GITHUB_ENV
 
       - name: replace tokens
         uses: cschleiden/replace-tokens@v1
