@@ -152,6 +152,20 @@ jobs:
         run: |
           echo "$INGRESS_IP_ADDRESS=$(kubectl -n ingress-nginx get services ingress-nginx-controller -o jsonpath="{.status.loadBalancer.ingress[0].ip}")" >> $GITHUB_ENV
 
+      - name: replace tokens
+        uses: cschleiden/replace-tokens@v1
+        with:
+          tokenPrefix: '_{_'
+          tokenSuffix: '_}_'
+          files: '["kubernetes/development/*.yaml"]'
+        env:
+          NAMESPACE: ${{ vars.NAMESPACE }}
+          REPLICAS: ${{ vars.REPLICAS }}
+          IMAGE: "ghcr.io/{githubUsername}/solar-system:{githubSha}"
+
+      - name: check files
+        run: |
+          cat kubernetes/development/*.yaml
 
       
         
